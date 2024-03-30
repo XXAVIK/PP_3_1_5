@@ -1,14 +1,18 @@
 package ru.kata.spring.boot_security.demo.model;
 
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import ru.kata.spring.boot_security.demo.repository.RoleRepository;
 
 import javax.persistence.*;
 import javax.persistence.Table;
@@ -50,7 +54,20 @@ public class User implements UserDetails {
     @Column(name = "age")
     private Integer age;
 
-
+//    @JsonCreator
+//    public User(@JsonProperty("id") Long id, @JsonProperty("name") String username,
+//                 @JsonProperty("author") String password, @JsonProperty("roles") String roles,
+//                @JsonProperty("age") Integer age,@JsonProperty("email") String email,@JsonProperty("lastname") String lastName) {
+//        this.id = id;
+//        this.username = username;
+//        this.password = password;
+//
+//        this.age = age;
+//        this.email = email;
+//        this.lastName = lastName;
+//
+//        this.roles = roles.f
+//    }
     public User(Long id, String username, String password) {
         this.id = id;
         this.username = username;

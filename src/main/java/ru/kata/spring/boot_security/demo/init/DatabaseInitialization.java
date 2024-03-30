@@ -60,6 +60,7 @@ public class DatabaseInitialization {
             user.setRoles(roleSet);
             userRepository.save(user); //поменять на edit если hibernate
             logger.info(YELLOW + "Добавлен админ по умолчанию" + COLOR_RESET);
+            logger.info(roleSet.toString());
         }
         if (userByUsername("user") == null)
         {
@@ -67,6 +68,8 @@ public class DatabaseInitialization {
             user.setRoles(Collections.singleton(roleUser));
             userRepository.save(user);//поменять на edit если hibernate
             logger.info(YELLOW + "Добавлен юзер по умолчанию" + COLOR_RESET);
+            logger.info(user.getRoles().toString());
+
 
         }
         if (userByUsername("num1") == null)

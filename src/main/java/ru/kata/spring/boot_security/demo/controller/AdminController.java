@@ -68,7 +68,7 @@ public class AdminController {
 
     @GetMapping("/{id}/edit")
     public String edit(@PathVariable("id") Long id,Model model) {
-        log.info(YELLOW+userService.userById(id)+"Redact conmtroller get"+COLOR_RESET);
+        log.info(YELLOW+userService.userById(id)+"Redact controller get"+COLOR_RESET);
         model.addAttribute("user", userService.userById(id));
         return "admin";
     }

@@ -98,7 +98,7 @@ public class UserService {
 
     @Transactional
     public boolean delete(Long userId) {
-        if (userRepository.findById(userId) != null) {
+        if (userById(userId) != null) {
             userRepository.deleteById(userId);
             log.info(YELLOW + "Удаление юзера" + COLOR_RESET);
             return true;
@@ -106,4 +106,8 @@ public class UserService {
         return false;
     }
 
+    @Transactional
+    public List<Role> getRoles(){
+        return roleRepository.findAll();
+    }
 }
