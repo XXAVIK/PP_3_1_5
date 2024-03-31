@@ -69,9 +69,18 @@ public class RestController {
     }
 
     @PutMapping("/secure/users")
-    public User updateUser(@RequestBody User user) {
-        userService.edit(user); //сюда надо передать binding result
-        return user;
+    public ResponseEntity<?> updateUser(@RequestBody UserRequest userRequest) {
+        User user = userRequest.getUser();
+        Long[] roleIds = userRequest.getRoleIds();
+        Set<Role> roleSet = new HashSet<>();
+        for (Long roleId : roleIds) {
+            roleSet.add(roleRepository.getById(roleId));
+        }
+        user.setRoles(roleSet);
+        if (!userService.edit(user)) {
+            return new ResponseEntity<>(false,HttpStatus.BAD_REQUEST);
+        }  //сюда надо передать binding result
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @DeleteMapping("/secure/users/{id}")

@@ -5,13 +5,14 @@ async function selectExistingRoles(){
     const responseRoles = await fetch('/api/secure/roles'); // Выполняем GET запрос
     const roleList = await responseRoles.json();
 
-    var selectList = document.createElement("select");
-    selectList.className = "form-control"
-    selectList.name = "roleId"
-    selectList.id = "roleSelect";
-    selectList.multiple = true;
-    selectList.required = true;
-    rolesBody.appendChild(selectList);
+    // var selectList = document.createElement("select");
+    // selectList.className = "form-control"
+    // selectList.name = "roleId"
+    // selectList.id = "roleSelect";
+    // selectList.multiple = true;
+    // selectList.required = true;
+    // rolesBody.appendChild(selectList);
+    var selectList = document.getElementById("roleSelect");
 
     roleList.forEach(role =>{
         const option = document.createElement("option")
