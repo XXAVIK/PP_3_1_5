@@ -98,21 +98,6 @@
                             </thead>
                             <tbody id="userTableBody">
 
-                            <!--                                <td>-->
-                            <!--                                    <button class="btn" id="edit-btn" data-toggle="modal"-->
-                            <!--                                            th:attr="data-target=${'#editModal'+userT.id}"-->
-                            <!--                                            th:href="@{admin/{id}/edit(id=${user.getId()})}"-->
-                            <!--                                    >EDIT-->
-                            <!--                                    </button>-->
-
-                            <!--                                </td>-->
-
-                            <!--                                <td>-->
-                            <!--                                    <form th:method="DELETE" th:action="@{admin/{id}(id=${userT.getId()})}">-->
-                            <!--                                        <button type="submit" class="btn btn-danger">Delete</button>-->
-                            <!--                                    </form>-->
-                            <!--                                </td>-->
-
                             </tbody>
                         </table>
 
@@ -126,50 +111,6 @@
                             Add new user
                         </div>
                         <div class="row justify-content-center">
-                            <!--                            <form th:method="POST" th:action="@{/admin}" th:object="${user}">-->
-                            <!--                                <div>-->
-                            <!--                                    <label for="username"> <b>First name</b></label>-->
-                            <!--                                    <input type="text" class="form-control"-->
-                            <!--                                           th:classappend="${bindingResult} and ${bindingResult.hasFieldErrors('username')} ? 'is-invalid'"-->
-                            <!--                                           th:field="*{username}" id="username" placeholder="Joe">-->
-                            <!--                                    <th:block th:if="${bindingResult} and ${bindingResult.hasFieldErrors('username')}">-->
-                            <!--                                        <div class="invalid-feedback"-->
-                            <!--                                             th:each="error : ${bindingResult.getFieldErrors('username')}"-->
-                            <!--                                             th:text="${error.getDefaultMessage()}"/>-->
-                            <!--                                    </th:block>-->
-                            <!--                                </div>-->
-                            <!--                                <div class="form-group">-->
-                            <!--                                    <label for="lastnameInput">Last name</label>-->
-                            <!--                                    <input type="text" th:field="*{lastName}" class="form-control" id="lastnameInput"-->
-                            <!--                                           placeholder="Rogan">-->
-                            <!--                                </div>-->
-                            <!--                                <div class="form-group">-->
-                            <!--                                    <label for="age">Age</label>-->
-                            <!--                                    <input type="number" th:field="*{age}" class="form-control" id="age"-->
-                            <!--                                           placeholder="56">-->
-                            <!--                                </div>-->
-                            <!--                                <div class="form-group">-->
-                            <!--                                    <label for="email">Email</label>-->
-                            <!--                                    <input type="text" th:field="*{email}" class="form-control" id="email"-->
-                            <!--                                           placeholder="joe_rogan@experience">-->
-                            <!--                                </div>-->
-                            <!--                                <div class="form-group">-->
-                            <!--                                    <label for="password">Password</label>-->
-                            <!--                                    <input type="text" th:field="*{password}" required class="form-control"-->
-                            <!--                                           id="password" placeholder="Bear noises">-->
-                            <!--                                    <div class="form-group">-->
-                            <!--                                        <label for="roleSelect">Role</label>-->
-                            <!--                                        <select th:field="*{roles}" required multiple class="form-control"-->
-                            <!--                                                id="roleSelect">-->
-                            <!--                                            <option-->
-                            <!--                                                    th:field="*{roles}" th:each="role: ${roles_list}"-->
-                            <!--                                                    th:value="${role.id}"-->
-                            <!--                                                    th:text="${role.name}"></option>-->
-                            <!--                                        </select>-->
-                            <!--                                    </div>-->
-                            <!--                                    <button type="submit" class="btn bg-success text-white">Add new user</button>-->
-                            <!--                            </form>-->
-
                             <form id="new-user">
                                 <div>
                                     <label for="username"> <b>First name</b></label>
@@ -265,17 +206,6 @@
                                     <select class="form-control" name = "roleId" id ="roleEdit" multiple required></select>
 
                                 </div>
-
-
-<!--                                <div class="form-group">-->
-<!--                                    <label for="roleSelect">Role</label>-->
-<!--                                    <select multiple class="form-control" required name="roles">-->
-<!--                                        <option th:each="role : ${roles_list}"-->
-<!--                                                th:selected="*{hasRole('__${role.id}__')}" th:text="${role.name}"-->
-<!--                                                th:value="${role.id}">-->
-<!--                                    </select>-->
-<!--                                </div>-->
-
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary"
                                             data-dismiss="modal">Close
@@ -322,6 +252,7 @@
 <script type="text/javascript" src="js/editUser.js"></script>
 <script type="text/javascript" src="js/selectExistingRoles.js"></script>
 <script type="text/javascript" src="js/userInfo.js"></script>
+
 
 </body>
 </html>

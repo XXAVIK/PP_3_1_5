@@ -33,9 +33,6 @@ public class RestController {
     private final UserService userService;
     private final RoleRepository roleRepository;
 
-
-    public static final FieldError error = new FieldError("username", "username", "Username already exists");
-
     @GetMapping("/secure/users")
     public List<User> showAllUsers() {
         List<User> userList = userService.listUsers();
@@ -54,7 +51,6 @@ public class RestController {
 
     @PostMapping("/secure/users")
     public ResponseEntity<?> createUser(@RequestBody UserRequest userRequest) {
-//        log.info(roleId.toString());
         User user = userRequest.getUser();
         Long[] roleIds = userRequest.getRoleIds();
         Set<Role> roleSet = new HashSet<>();
@@ -64,7 +60,7 @@ public class RestController {
         user.setRoles(roleSet);
         if (!userService.save(user)) {
             return new ResponseEntity<>(false,HttpStatus.BAD_REQUEST);
-        }  //сюда надо передать binding result
+        }
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
@@ -79,7 +75,7 @@ public class RestController {
         user.setRoles(roleSet);
         if (!userService.edit(user)) {
             return new ResponseEntity<>(false,HttpStatus.BAD_REQUEST);
-        }  //сюда надо передать binding result
+        }
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
@@ -96,10 +92,9 @@ public class RestController {
     public List<Role> showAllRoles() {
         return userService.getRoles();
     }
-    @GetMapping("/user")
+    @GetMapping("/users")
     public ResponseEntity<?> getUserInfo(Principal principal) {
         User user = userService.findByUsername(principal.getName());
-        // Дополнительная логика для получения информации о пользователе
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 }

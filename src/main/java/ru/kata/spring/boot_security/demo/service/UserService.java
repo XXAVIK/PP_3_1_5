@@ -46,9 +46,6 @@ public class UserService {
 
     @Transactional
     public boolean save(User user) {
-//        if (!duplicateNameCheck(user).isEmpty()){
-//            return false;
-//        }
         User userFromDB = userRepository.findByUsername(user.getUsername());
 
         if (userFromDB != null) {
@@ -58,7 +55,6 @@ public class UserService {
         }
 
         log.info(YELLOW + "Создание нового юзера " + COLOR_RESET + user.getUsername());
-//        user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userRepository.save(user);
 

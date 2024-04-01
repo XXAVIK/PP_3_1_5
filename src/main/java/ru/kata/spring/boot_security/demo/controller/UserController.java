@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
 import javax.validation.Valid;
-import java.security.Principal;
-import static ru.kata.spring.boot_security.demo.controller.AdminController.error;
 import static ru.kata.spring.boot_security.demo.service.UserService.COLOR_RESET;
 import static ru.kata.spring.boot_security.demo.service.UserService.YELLOW;
 
@@ -24,8 +22,7 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/user")
-    public String startUp(Model model, Principal principal) {
-        model.addAttribute("user", userService.findByUsername(principal.getName()));
+    public String startUp() {
         return "user";
     }
 
@@ -37,7 +34,6 @@ public class UserController {
             return "registration";
         }
         if (!userService.save(user)) {
-            bindingResult.addError(error);
             log.info(YELLOW + "Попытка дубликата - лог пишется из пост контроллера - registration" + COLOR_RESET);
             return "registration";
         }

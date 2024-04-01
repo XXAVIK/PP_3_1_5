@@ -1,5 +1,6 @@
+const tableBody = document.getElementById('userTableBody');
+
 function newRow(user) {
-    const tableBody = document.getElementById('userTableBody');
     const row = tableBody.insertRow();
     let rolesView = '';
 

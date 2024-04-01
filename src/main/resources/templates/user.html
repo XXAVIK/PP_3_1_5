@@ -14,10 +14,15 @@
 <nav id="h-nav" class="navbar fixed-top navbar-expand bg-dark">
     <div class="container-fluid">
         <div class="navbar-collapse">
-            <span class="navbar-text text-white font-weight-bold" th:text="${user.email} + '&nbspwith roles:&nbsp'"></span>
-            <span class="navbar-text text-white font-weight-bold" th:each="role : ${user.roles}"
-                  th:text="${role.name}+'&nbsp'"
-            ></span>
+            <span class="navbar-text text-white font-weight-bold"
+            <b sec:authentication="name"/>
+            <span class="navbar-text text-white font-weight-bold"
+                  th:text="'&nbspwith roles:&nbsp'"></span>
+            <th:block th:each="role : ${#authentication.authorities}">
+                &nbsp;<span class="navbar-text text-white font-weight-bold"
+                            th:text="${role.getName()+';'}"/>
+            </th:block>
+            </span>
         </div>
     </div>
     <a class="btn-dark text-secondary font-weight-bold" href="/logout">Logout</a>
@@ -51,38 +56,26 @@
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1>User information-page</h1>
             </div>
-                    <div class="card">
-                        <div class="card-header"> All users
-                        </div>
-                        <table class="table table-striped table-sm">
-                            <thead>
-                            <tr>
-                                <th>Id</th>
-                                <th>Name</th>
-                                <th>LastName</th>
-                                <th>Email</th>
-                                <th>Age</th>
-                                <th>Roles</th>
+            <div class="card">
+                <div class="card-header"> All users
+                </div>
+                <table class="table table-striped table-sm">
+                    <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>LastName</th>
+                        <th>Email</th>
+                        <th>Age</th>
+                        <th>Roles</th>
 
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td th:utext="${user.id}">Id</td>
-                                <td th:utext="${user.username}">Username</td>
-                                <td th:utext="${user.lastName}">LastName</td>
-                                <td th:utext="${user.email}">Email</td>
-                                <td th:utext="${user.age}">Age</td>
-                                <td class="col_name">
-                                <span th:each="userRole : ${user.roles}"
-                                      th:text="${userRole.getAuthority()}+';'">[role]</span>
-                                    <!-- format with line breaks as needed -->
-                                </td>
-                            </tr>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                    </tr>
+                    </thead>
+                    <tbody id="userInfoTableBody">
+
+                    </tbody>
+                </table>
+            </div>
         </main>
     </div>
 </div>
@@ -97,5 +90,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
         integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
         crossorigin="anonymous"></script>
+<script type="text/javascript" src="js/userInfo.js"></script>
+
 </body>
 </html>

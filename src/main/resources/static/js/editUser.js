@@ -4,8 +4,8 @@ const modal = new bootstrap.Modal(document.getElementById("edit-modal"))
 
 function editRow(user) {
     const rowId = 'info-row-' + user.id;
-
     const row = document.getElementById(rowId);
+
     let rolesView = '';
 
     user.roles.forEach(role => {
@@ -27,17 +27,10 @@ function editRow(user) {
       `;
 
 }
+
 async function editRoles(user) {
     const responseRoles = await fetch('/api/secure/roles'); // Выполняем GET запрос
     const roleList = await responseRoles.json();
-
-    // var selectList = document.createElement("select");
-    // selectList.className = "form-control"
-    // selectList.name = "roleId"
-    // selectList.id = "roleEdit";
-    // selectList.multiple = true;
-    // selectList.required = true;
-    // rolesEditBody.appendChild(selectList);
 
     let selectList = document.getElementById("roleEdit");
     selectList.options.length = 0;
@@ -50,7 +43,6 @@ async function editRoles(user) {
         user.roles.forEach(userRole => {
             if (role.id === userRole.id) {
                 option.selected = true;
-                // alert(userRole.name)
             }
         })
 
@@ -58,8 +50,6 @@ async function editRoles(user) {
 }
 
 async function editUser(id) {
-    // alert(`Попытка редактирования пользователя с айди ${id}`)
-
     const response = await fetch(`/api/secure/users/${id}`);
     let user = await response.json();
 
@@ -69,10 +59,7 @@ async function editUser(id) {
     editForm.elements["age"].value = user.age;
     editForm.elements["lastname"].value = user.lastName;
     editForm.elements["password"].value = user.password;
-    // form.elements["password"].hidden = true;
     await editRoles(user);
-
-
     modal.show();
 
 }
@@ -81,16 +68,6 @@ async function editUser(id) {
 async function editSubmit() {
     const selectedOptions = Array.from(document.getElementById('roleEdit').selectedOptions);
     const selectedIds = selectedOptions.map(option => parseInt(option.value));
-
-    // const formData = {
-    //     id: editForm.querySelector('#editId').value,
-    //     username: editForm.querySelector('#usernameEdit').value,
-    //     lastName: editForm.querySelector('#lastnameEdit').value,
-    //     age: editForm.querySelector('#ageEdit').value,
-    //     email: editForm.querySelector('#emailEdit').value,
-    //     password: editForm.querySelector('#passwordEdit').value,
-    // };
-
 
     const formData = {
         id: editForm.elements["id"].value,
@@ -108,7 +85,6 @@ async function editSubmit() {
 
     let jsonResponse;
     try {
-        alert(JSON.stringify(userRequest))
         const response = await fetch('api/secure/users', {
             method: "PUT",
             headers: {
