@@ -2,7 +2,7 @@ const form = document.querySelector("#new-user");
 const rolesBody = document.getElementById('new-roleSelect')
 
 async function selectExistingRoles() {
-    const responseRoles = await fetch('/api/secure/roles'); // Выполняем GET запрос
+    const responseRoles = await fetch('/api/users/roles'); // Выполняем GET запрос
     const roleList = await responseRoles.json();
     const selectList = document.getElementById("roleSelect");
 
@@ -38,7 +38,7 @@ async function newUser() {
     let jsonResponse;
 
     try {
-        const response = await fetch('api/secure/users', {
+        const response = await fetch('api/users', {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -59,7 +59,6 @@ async function newUser() {
 }
 
 
-// Take over form submission
 form.addEventListener("submit", (event) => {
     event.preventDefault();
 

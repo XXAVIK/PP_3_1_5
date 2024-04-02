@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
+
 import javax.validation.Valid;
+
 import static ru.kata.spring.boot_security.demo.service.UserService.COLOR_RESET;
 import static ru.kata.spring.boot_security.demo.service.UserService.YELLOW;
 

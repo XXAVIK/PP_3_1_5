@@ -1,8 +1,7 @@
 
-// Функция для выполнения запроса и заполнения таблицы
 async function fetchAndFillTable() {
     try {
-        const response = await fetch('/api/secure/users'); // Выполняем GET запрос
+        const response = await fetch('/api/users'); // Выполняем GET запрос
         const userList = await response.json(); // Преобразуем ответ в JSON
 
         userList.forEach(user => {
@@ -14,5 +13,4 @@ async function fetchAndFillTable() {
     }
 }
 
-// Вызываем функцию для заполнения таблицы при загрузке страницы
 fetchAndFillTable();

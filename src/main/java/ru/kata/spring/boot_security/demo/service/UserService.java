@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
+import ru.kata.spring.boot_security.demo.model.UserRequest;
 import ru.kata.spring.boot_security.demo.repository.RoleRepository;
 import ru.kata.spring.boot_security.demo.repository.UserRepository;
 
@@ -26,9 +27,6 @@ public class UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-
-
-    // Declaring the color
     public static final String COLOR_RESET = "\u001B[0m";
     public static final String YELLOW = "\u001B[33m";
 
@@ -47,50 +45,40 @@ public class UserService {
     @Transactional
     public boolean save(User user) {
         User userFromDB = userRepository.findByUsername(user.getUsername());
-
         if (userFromDB != null) {
             log.info(YELLOW + "Попытка создания дубликата юзернэйма " + COLOR_RESET + user.getUsername());
 
             return false;
         }
-
         log.info(YELLOW + "Создание нового юзера " + COLOR_RESET + user.getUsername());
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userRepository.save(user);
-
         return true;
     }
 
     @Transactional
     public boolean edit(User user) {
-        String usernameFromInput = user.getUsername(); //Получаю имя из инпута
-        String usernameFromDB = (userRepository.       //Получаю имя юзера с тем же айди из БД
-                findById(user.getId()).orElse(null).getUsername());
-        //Получаю всего пользователя по имени
-        User userFromDB = userRepository.findByUsername(usernameFromInput);
-
-        //Проверяю существует ли юзернэйм из инпута в БД
-        //Если уже существует, значит это либо пользователь без изменений, либо имя оставили без изменений
-        if (usernameFromInput.equals(usernameFromDB)) {
-            log.info(YELLOW + "Редактирование пользователя не меняя имени " + COLOR_RESET + user.getUsername());
-            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-            userRepository.save(user); //поменять на edit если hibernate
-            return true;
-        }
-        //Если новое имя из инпута совпадает со старым, то оно попадет в этот фильтр
-        if (userFromDB != null) {
-            log.info(YELLOW + "Попытка создания дубликата юзернэйма v REDACTOR " + COLOR_RESET + user.getUsername());
+        User existingUser = userRepository.findById(user.getId()).orElse(null);
+        if (existingUser == null) {
+            log.error("Пользователь с ID " + user.getId() + " не найден в базе данных");
             return false;
         }
-        //Если юзернейм новый, но поменялись любые другие поля, то пользователь попадает сюда
-        log.info(YELLOW + "Создание нового юзера v REDACTOR " + COLOR_RESET + user.getUsername());
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        userRepository.save(user); //поменять на edit если hibernate
-
-        //Я чет не смог придумать лучше способа отлавливать случаи,когда в редакторе вводится уже сущ имя
-
+        String usernameFromInput = user.getUsername();
+        String usernameFromDB = existingUser.getUsername();
+        if (!usernameFromInput.equals(usernameFromDB)) {
+            User userWithSameUsername = userRepository.findByUsername(usernameFromInput);
+            if (userWithSameUsername != null) {
+                log.info("Попытка создания дубликата пользователя с именем: " + usernameFromInput);
+                return false;
+            }
+        }
+        log.info("Редактирование пользователя: " + usernameFromDB);
+        existingUser.setUsername(usernameFromInput);
+        existingUser.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        userRepository.save(existingUser);
         return true;
     }
+
 
     @Transactional
     public boolean delete(Long userId) {
@@ -103,7 +91,19 @@ public class UserService {
     }
 
     @Transactional
-    public List<Role> getRoles(){
+    public List<Role> getRoles() {
         return roleRepository.findAll();
+    }
+
+    @Transactional
+    public User setRolesFromUserRequest(UserRequest userRequest) {
+        User user = userRequest.getUser();
+        Long[] roleIds = userRequest.getRoleIds();
+        Set<Role> roleSet = new HashSet<>();
+        for (Long roleId : roleIds) {
+            roleSet.add(roleRepository.getById(roleId));
+        }
+        user.setRoles(roleSet);
+        return user;
     }
 }

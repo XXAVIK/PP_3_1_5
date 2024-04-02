@@ -1,8 +1,8 @@
 const userInfoTableBody = document.getElementById('userInfoTableBody');
 async function showLoggedInfo() {
     try {
-        const response = await fetch('/api/users'); // Выполняем GET запрос
-        const user = await response.json(); // Преобразуем ответ в JSON
+        const response = await fetch('/api/users/logged');
+        const user = await response.json();
 
         userInfo(user);
 

@@ -4,9 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
@@ -14,32 +11,26 @@ import ru.kata.spring.boot_security.demo.model.UserRequest;
 import ru.kata.spring.boot_security.demo.repository.RoleRepository;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
-import javax.validation.Valid;
 import java.security.Principal;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static ru.kata.spring.boot_security.demo.service.UserService.COLOR_RESET;
-import static ru.kata.spring.boot_security.demo.service.UserService.YELLOW;
-
-@org.springframework.web.bind.annotation.RestController
-@RequestMapping("/api")
+@RestController
+@RequestMapping("/api/users")
 @RequiredArgsConstructor
 @Slf4j
-public class RestController {
+public class UserRestController {
 
     private final UserService userService;
     private final RoleRepository roleRepository;
 
-    @GetMapping("/secure/users")
+    @GetMapping()
     public List<User> showAllUsers() {
-        List<User> userList = userService.listUsers();
-        return userList;
+        return userService.listUsers();
     }
 
-    @GetMapping("/secure/users/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<?> getUser(@PathVariable long id) {
         User user = userService.userById(id);
         if (user == null) {
@@ -49,37 +40,25 @@ public class RestController {
         }
     }
 
-    @PostMapping("/secure/users")
+    @PostMapping()
     public ResponseEntity<?> createUser(@RequestBody UserRequest userRequest) {
-        User user = userRequest.getUser();
-        Long[] roleIds = userRequest.getRoleIds();
-        Set<Role> roleSet = new HashSet<>();
-        for (Long roleId : roleIds) {
-            roleSet.add(roleRepository.getById(roleId));
-        }
-        user.setRoles(roleSet);
+        User user = userService.setRolesFromUserRequest(userRequest);
         if (!userService.save(user)) {
-            return new ResponseEntity<>(false,HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @PutMapping("/secure/users")
-    public ResponseEntity<?> updateUser(@RequestBody UserRequest userRequest) {
-        User user = userRequest.getUser();
-        Long[] roleIds = userRequest.getRoleIds();
-        Set<Role> roleSet = new HashSet<>();
-        for (Long roleId : roleIds) {
-            roleSet.add(roleRepository.getById(roleId));
-        }
-        user.setRoles(roleSet);
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateUser(@PathVariable("id") Long id ,@RequestBody UserRequest userRequest) {
+        User user = userService.setRolesFromUserRequest(userRequest);
         if (!userService.edit(user)) {
-            return new ResponseEntity<>(false,HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @DeleteMapping("/secure/users/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Long id) {
         if (!userService.delete(id)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -88,11 +67,12 @@ public class RestController {
         }
     }
 
-    @GetMapping("/secure/roles")
+    @GetMapping("/roles")
     public List<Role> showAllRoles() {
         return userService.getRoles();
     }
-    @GetMapping("/users")
+
+    @GetMapping("/logged")
     public ResponseEntity<?> getUserInfo(Principal principal) {
         User user = userService.findByUsername(principal.getName());
         return new ResponseEntity<>(user, HttpStatus.OK);

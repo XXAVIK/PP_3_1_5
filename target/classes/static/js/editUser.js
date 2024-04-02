@@ -29,7 +29,7 @@ function editRow(user) {
 }
 
 async function editRoles(user) {
-    const responseRoles = await fetch('/api/secure/roles'); // Выполняем GET запрос
+    const responseRoles = await fetch('/api/users/roles'); // Выполняем GET запрос
     const roleList = await responseRoles.json();
 
     let selectList = document.getElementById("roleEdit");
@@ -50,7 +50,7 @@ async function editRoles(user) {
 }
 
 async function editUser(id) {
-    const response = await fetch(`/api/secure/users/${id}`);
+    const response = await fetch(`/api/users/${id}`);
     let user = await response.json();
 
     editForm.elements["id"].value = user.id
@@ -78,6 +78,8 @@ async function editSubmit() {
         age: editForm.elements["age"].value
     };
 
+    const id = formData.id;
+
     const userRequest = {
         user: formData,
         roleIds: selectedIds
@@ -85,7 +87,7 @@ async function editSubmit() {
 
     let jsonResponse;
     try {
-        const response = await fetch('api/secure/users', {
+        const response = await fetch(`api/users/${id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
@@ -112,6 +114,3 @@ editForm.addEventListener("submit", (event) => {
 
     editSubmit();
 });
-
-
-

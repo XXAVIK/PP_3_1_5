@@ -24,14 +24,12 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 @Data
-@NoArgsConstructor // Без этого идея ругается, что у класса нет пустого конструктора,
-                   // наверное потому что у меня определен уже один кастомный констурктор
+@NoArgsConstructor
 public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column(name = "username", unique = true)
     @NotEmpty(message = "Field can't be empty!")
     private String username;
@@ -45,29 +43,13 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
-
     @Column(name = "last_name")
     private String lastName;
-
     @Column(name = "email")
     private String email;
     @Column(name = "age")
     private Integer age;
 
-//    @JsonCreator
-//    public User(@JsonProperty("id") Long id, @JsonProperty("name") String username,
-//                 @JsonProperty("author") String password, @JsonProperty("roles") String roles,
-//                @JsonProperty("age") Integer age,@JsonProperty("email") String email,@JsonProperty("lastname") String lastName) {
-//        this.id = id;
-//        this.username = username;
-//        this.password = password;
-//
-//        this.age = age;
-//        this.email = email;
-//        this.lastName = lastName;
-//
-//        this.roles = roles.f
-//    }
     public User(Long id, String username, String password) {
         this.id = id;
         this.username = username;
@@ -108,6 +90,7 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
     public boolean hasRole(int roleId) {
         if (null == roles || 0 == roles.size()) {
             return false;

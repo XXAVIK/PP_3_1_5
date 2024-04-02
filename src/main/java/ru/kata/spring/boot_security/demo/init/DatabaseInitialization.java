@@ -29,12 +29,9 @@ public class DatabaseInitialization {
 
     private Logger logger = LoggerFactory.getLogger(DatabaseInitialization.class);
 
-
     public User userByUsername(String name) {
         return userRepository.findByUsername(name);
     }
-
-    //      Создание пользователей и ролей по умолчанию
 
     @PostConstruct
     void init() {
@@ -44,16 +41,13 @@ public class DatabaseInitialization {
         Set<Role> userRoleSet = new HashSet<>();
         userRoleSet.add(roleUser);
 
-//        if (roleRepository.findById(1L) == null) Hinernate impl
-        if (roleRepository.findById(1L).orElse(null) == null)
-        {
+        if (roleRepository.findById(1L).orElse(null) == null) {
             roleRepository.save(roleUser);
             roleRepository.save(roleAdmin);
             logger.info(YELLOW + "Добавлены роли по умолчанию" + COLOR_RESET);
         }
 
-        if (userByUsername("admin") == null)
-        {
+        if (userByUsername("admin") == null) {
             User user = new User(1L, "admin", bCryptPasswordEncoder.encode("100"));
             List<Role> roleList = new ArrayList<>(roleRepository.findAll());
             Set<Role> roleSet = Set.copyOf(roleList);
@@ -62,8 +56,7 @@ public class DatabaseInitialization {
             logger.info(YELLOW + "Добавлен админ по умолчанию" + COLOR_RESET);
             logger.info(roleSet.toString());
         }
-        if (userByUsername("user") == null)
-        {
+        if (userByUsername("user") == null) {
             User user = new User(2L, "user", bCryptPasswordEncoder.encode("100"));
             user.setRoles(Collections.singleton(roleUser));
             userRepository.save(user);//поменять на edit если hibernate
@@ -72,8 +65,7 @@ public class DatabaseInitialization {
 
 
         }
-        if (userByUsername("num1") == null)
-        {
+        if (userByUsername("num1") == null) {
             User user = new User(3L, "num1", bCryptPasswordEncoder.encode("1"));
             user.setEmail("1@1");
             user.setLastName("N1");
@@ -82,8 +74,7 @@ public class DatabaseInitialization {
             logger.info(YELLOW + "Добавлен num1" + COLOR_RESET);
 
         }
-        if (userByUsername("num2") == null)
-        {
+        if (userByUsername("num2") == null) {
             User user = new User(4L, "num2", bCryptPasswordEncoder.encode("2"));
             user.setEmail("2@2");
             user.setLastName("N2");
@@ -92,8 +83,7 @@ public class DatabaseInitialization {
             logger.info(YELLOW + "Добавлен num2" + COLOR_RESET);
 
         }
-        if (userByUsername("test1") == null)
-        {
+        if (userByUsername("test1") == null) {
             User user = new User(5L, "test1", bCryptPasswordEncoder.encode("1"));
             user.setEmail("t1@1t");
             user.setLastName("T1");
@@ -102,8 +92,7 @@ public class DatabaseInitialization {
             logger.info(YELLOW + "Добавлен t1" + COLOR_RESET);
 
         }
-        if (userByUsername("test2") == null)
-        {
+        if (userByUsername("test2") == null) {
             User user = new User(6L, "test2", bCryptPasswordEncoder.encode("2"));
             user.setEmail("t2@2t");
             user.setLastName("T2");

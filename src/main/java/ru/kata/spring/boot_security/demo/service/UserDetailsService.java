@@ -12,14 +12,12 @@ import ru.kata.spring.boot_security.demo.repository.UserRepository;
 public class UserDetailsService implements org.springframework.security.core.userdetails.UserDetailsService {
     private final UserRepository userRepository;
 
-
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
 
         if (user == null) {
             throw new UsernameNotFoundException(String.format("User '%s' not found", username));
         }
-
         return user;
     }
 }

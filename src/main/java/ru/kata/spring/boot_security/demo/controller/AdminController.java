@@ -33,8 +33,9 @@ public class AdminController {
     public String startUp() {
         return "admin";
     }
+
     @GetMapping("admin-info")
-    public String info(Model model,Principal principal) {
+    public String info(Model model, Principal principal) {
         model.addAttribute("user", userService.findByUsername(principal.getName()));
         return "admin-info";
     }
